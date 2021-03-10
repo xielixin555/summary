@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>原生弹窗</title>
+</head>
+<style>
+  .dialog {
+    width: 200px;
+    height: 200px;
+    border: 1px solid red;
+    position: relative;
+    top: 50px;
+    left: 50px;
+    z-index: 30;
+    display: none;
+  }
+</style>
+
+<body>
+  <div>
+    <button id="btn">点击出弹窗</button>
+    <div class="dialog" id="dialogshow">
+      <input type="text">
+      <button id="cancel">取消</button>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+  let button = document.getElementById('btn')
+  let dialog = document.getElementById('dialogshow')
+  let cancel = document.getElementById('cancel')
+  button.onclick = function () {
+    dialog.style.display = 'block'
+  }
+  cancel.onclick = function () {
+    dialog.style.display = 'none'
+  }
+</script>

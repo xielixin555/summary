@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>原生tab切换</title>
+</head>
+<style>
+  .big-box {
+    width: 350px;
+    height: 400px;
+    border: 1px solid darkorange;
+  }
+
+  .tab-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .tab-box li {
+    width: 100px;
+    height: 50px;
+    list-style: none;
+    text-align: center;
+    line-height: 50px;
+    border: 1px solid red;
+  }
+
+  .conts {
+    display: none;
+  }
+</style>
+
+<body>
+  <div class="big-box">
+    <div class="tab-box" id="">
+      <li id="tabs">tab1</li>
+      <li id="tabs">tab2</li>
+      <li id="tabs">tab3</li>
+    </div>
+    <div class="content-box">
+      <div id="content" class="conts" style="display:block">内容1</div>
+      <div id="content" class="conts">内容2</div>
+      <div id="content" class="conts">内容3</div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+  let tabChange = document.querySelectorAll('#tabs')
+  let contentChange = document.querySelectorAll('#content')
+  for (let i = 0; i < tabChange.length; i++) {
+    tabChange[i].onclick = function () {
+      for (let i = 0; i < contentChange.length; i++) {
+        //把所有元素的diaplay样式清空
+        contentChange[i].style.display = 'none'
+      }
+      //把当前点击的内容元素显示
+      contentChange[i].style.display = 'block'
+    }
+  }
+</script>

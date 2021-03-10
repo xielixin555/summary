@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>原生轮播图</title>
+</head>
+
+<body>
+  <div id="imgs">
+    <!-- <img src="" alt="" id="imgs"> -->
+  </div>
+</body>
+
+</html>
+<script>
+  let arr = ['aa', 'bb', 'cc', 'dd', 'ee']
+  let i = 0
+  let elem = document.getElementById('imgs')
+  setInterval(() => {
+    elem.innerHTML = arr[i]
+    i++
+    if (i == (arr.length)) {
+      i = 0
+    }
+  }, 1000)
+</script>
