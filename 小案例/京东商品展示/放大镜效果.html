@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            display: flex;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            border: 0;
+            margin: 0;
+        }
+        .container{
+            width: 452px;
+            position: relative;
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+        .top {
+            width: 452px;
+            height: 452px;
+            border: 1px #ccc solid;
+            cursor: move;
+        }
+        .top li {
+            display: none;
+        }
+        .top .small{
+            display: none;
+            width: 300px;
+            height: 300px;
+            background: #d39e00;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: .5;
+            z-index: 1;
+        }
+        li.active {
+            display: block;
+        }
+        .box {
+            width: 390px;
+            height: 58px;
+            display: inline-block;
+            overflow: hidden;
+            position: relative;
+            margin-left: 30px;
+            margin-top: 20px;
+        }
+        .bottom {
+            position: absolute;
+            width: 546px;
+            height: 58px;
+            font-size: 0;
+            left: 0;
+            transition: .2s ease;
+        }
+        .bottom li {
+            display: inline-block;
+            border: 2px #fff solid;
+            margin: 0 10px;
+        }
+        span {
+            display: inline-block;
+            width: 30px;
+            height: 58px;
+            position: absolute;
+            line-height: 58px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 30px;
+            font-weight: bolder;
+            color: #aaa;
+        }
+        .left {
+            left: 0;
+            bottom: 0;
+        }
+        .right {
+            right: 0;
+            bottom: 0;
+        }
+        /*****************************/
+        .bigBox{
+            width: 533px;
+            height: 533px;
+            margin-top: 50px;
+            margin-left: 3px;
+            border: 1px #ccc solid;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        .bigBox li {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <ul class="top">
+        <li class="active"><img src="img/1xx.jpg"></li>
+        <li><img src="img/2xx.jpg"></li>
+        <li><img src="img/3xx.jpg"></li>
+        <li><img src="img/4xx.jpg"></li>
+        <li><img src="img/5xx.jpg"></li>
+        <li><img src="img/6xx.jpg"></li>
+        <li><img src="img/7xx.jpg"></li>
+        <div class="small"></div>
+    </ul>
+    <span class="left"><</span>
+    <div class="box">
+        <ul class="bottom">
+            <li><img src="img/1x.jpg"></li>
+            <li><img src="img/2x.jpg"></li>
+            <li><img src="img/3x.jpg"></li>
+            <li><img src="img/4x.jpg"></li>
+            <li><img src="img/5x.jpg"></li>
+            <li><img src="img/6x.jpg"></li>
+            <li><img src="img/7x.jpg"></li>
+        </ul>
+    </div>
+    <span class="right">></span>
+</div>
+<ul class="bigBox">
+    <li><img src="img/1xxx.jpg"></li>
+    <li><img src="img/2xxx.jpg"></li>
+    <li><img src="img/3xxx.jpg"></li>
+    <li><img src="img/4xxx.jpg"></li>
+    <li><img src="img/5xxx.jpg"></li>
+    <li><img src="img/6xxx.jpg"></li>
+    <li><img src="img/7xxx.jpg"></li>
+</ul>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        var topLi = document.querySelectorAll('.top li');
+        var bottom = document.querySelector('.box .bottom');
+        var bottomLi = document.querySelectorAll('.box .bottom li');
+        var leftSpan = document.querySelector('.left');
+        var rightSpan = document.querySelector('.right');
+        var bigBox = document.querySelector('.bigBox');
+        var bigLi = document.querySelectorAll('.bigBox li');
+        var small = document.querySelector('.top .small');
+        var topLen = topLi.length;
+        var bottomLen = bottomLi.length;
+        var test = null;
+        var x=null;
+        var y = null;
+        var ratioX=null;
+        var ratioY=null;
+        var index = null;
+        function turnLeft(){
+            test = parseInt(getComputedStyle(bottom).left);
+            if (test>-156){
+                bottom.style.left = test - 156+'px';
+            }
+        }
+        function turnRight(){
+            test = parseInt(getComputedStyle(bottom).left);
+            if (test<0){
+                bottom.style.left = test + 156+'px';
+            }
+        }
+        function bottomOver(){
+            for (var j=0;j<bottomLen;j++){
+                bottomLi[j].style.borderColor = '#fff';
+                topLi[j].style.display='none';
+            }
+            bottomLi[this.index].style.borderColor='#f00';
+            topLi[this.index].style.display='block';
+            small.style.display='none';
+        }
+        function topOver(){
+            for (var l=0;l<topLen;l++){
+                bigLi[l].style.display = 'none';
+            }
+            bigLi[this.index].style.display = 'block';
+            small.style.display='block';
+            index = this.index;
+            small.addEventListener('mouseover',function () {
+                bigBox.style.display = 'block';
+            })
+            document.addEventListener('mousemove',function (event) {
+                x=event.clientX-200;
+                y=event.clientY-200;
+                small.style.left = x+'px';
+                small.style.top = y+'px';
+                x<0?x=0:x;
+                y<0?y=0:y;
+                x>152?x=152:x;
+                y>152?y=152:y;
+                small.style.left = x+'px';
+                small.style.top = y+'px';
+                ratioX = x/450;
+                ratioY = y/450;
+                 bigLi[index].style.left=(-ratioX*800)+'px';
+                 bigLi[index].style.top=(-ratioY*800)+'px';
+            })
+            small.addEventListener('mouseout',function () {
+                bigBox.style.display = 'none';
+                small.style.display='none';
+            })
+        }
+        leftSpan.addEventListener('click',turnLeft);
+        rightSpan.addEventListener('click',turnRight);
+        for (var i=0;i<bottomLen;i++){
+            bottomLi[i].index = i;
+            bottomLi[i].addEventListener('mouseover',bottomOver);
+        }
+        for (var k=0;k<topLen;k++){
+            topLi[k].index=k;
+            topLi[k].addEventListener('mouseover',topOver);
+        }
+    }
+</script>

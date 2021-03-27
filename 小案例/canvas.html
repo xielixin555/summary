@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>canvas</title>
+    <style type="text/css">
+        #c1{
+            border:1px solid red;
+        }
+    </style>
+<body>
+<canvas id="c1" width="1340" height="1000"></canvas>
+<script type="text/javascript">
+    window.onload=function(){
+        var c1=document.getElementById("c1");
+        var ctx=c1.getContext('2d');
+        ctx.translate(100,100);
+        setInterval(function(){
+            var grd = ctx.createLinearGradient(0,0,100,100);
+            grd.addColorStop(0,'red');
+            grd.addColorStop(0.3,'green');
+            grd.addColorStop(0.5,'gray');
+            grd.addColorStop(0.7,'blue');
+            grd.addColorStop(1,'yellow');
+            ctx.fillStyle = grd;
+            ctx.clearRect(0,0,c1.width,c1.height);
+            ctx.rotate(Math.PI/180);
+            ctx.fillRect(0,0,100,100);
+            ctx.stroke();
+        },30);
+    }
+</script>

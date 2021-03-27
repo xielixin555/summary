@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            background: radial-gradient(#fff, #999);
+            /*方法三*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*position: relative;*/
+        }
+
+        #bg {
+            width: 500px;
+            height: 500px;
+            border: solid black 1px;
+            position: relative;
+            /*方法一*/
+            /*相对于离自己最近的,position为非static的祖先元素*/
+            /*position: absolute;*/
+            /*transform: translate(-50%,-50%);*/
+
+            /*方法二*/
+            /*left: 0;*/
+            /*top: 0;*/
+            /*right: 0;*/
+            /*bottom: 0;*/
+            /*margin: 0 auto;*/
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 100%;
+            background-color: black;
+            position: absolute;
+        }
+        #center-dot{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            left: calc(50% - 10px);
+            top: calc(50% - 10px);
+            background: black;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        #second-pointer{
+            width: 2px;
+            height: 300px;
+            background-color: red;
+            left: 249px;
+            z-index: 5;
+            animation: spin 60s linear infinite;
+            transform-origin: 50% 83.5%;
+        }
+        #minute-pointer{
+            width: 6px;
+            height: 240px;
+            background-color: blue;
+            left: 247px;
+            top:40px;
+            animation: spin 3600s linear infinite;
+            transform-origin: 50% 87.5%;
+        }
+        #hour-pointer{
+            width: 10px;
+            height: 150px;
+            background-color: black;
+            left: 245px;
+            top: 120px;
+            animation: spin 43200s linear infinite;
+            transform-origin: 50% 87%;
+        }
+        .pointer{
+            position: absolute;
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+        }
+
+        @keyframes spin {
+            0%{transform: rotate(0)}
+            100%{transform: rotate(360deg)}
+        }
+        span{
+            position: absolute;
+        }
+        .num{
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="bg">
+    <div id="center-dot"></div>
+    <div id="second-pointer" class="pointer"></div>
+    <div id="minute-pointer" class="pointer"></div>
+    <div id="hour-pointer" class="pointer"></div>
+</div>
+<script>
+    window.onload = function () {
+        var bg = document.querySelector('#bg');
+        var spanNum=3;
+        for (var i = 0; i < 60; i++) {
+            var dot = document.createElement('div');
+            dot.classList.add("dot");
+            var angle = i * 6;
+            // PI弧度 = 180角度
+            angle = angle / 180 * Math.PI;
+            if (i % 5 == 0) {
+                dot.style.width = '10px';
+                dot.style.height = '10px';
+                var x = 250 + 240 * Math.cos(angle) - 5;
+                var y = 250 + 240 * Math.sin(angle) - 5;
+
+
+                var num=document.createElement('div');
+                num.classList.add("num");
+                var numX = 250 + 210* Math.cos(angle-Math.PI/3)-13;
+                var numY = 250 + 200* Math.sin(angle-Math.PI/3)-13;
+                num.style.left = numX +'px';
+                num.style.top = numY +'px';
+                num.textContent = i/5+1;
+                bg.appendChild(num);
+
+
+                /*var span=document.createElement('span');
+                var an = i*30;
+                an=an/180*Math.PI;
+                var x1= 250 + 200* Math.cos(an)-10;
+                var y1= 250 + 200* Math.sin(an)-10;
+                span.style.left=x1+'px';
+                span.style.top=y1+'px';
+                span.style.fontSize='20px';
+                if (spanNum>12){
+                    spanNum=1;
+                }
+                span.innerHTML=spanNum;
+                spanNum++;
+                bg.appendChild(span);*/
+
+            } else {
+                var x = 250 + 240 * Math.cos(angle) - 2.5;
+                var y = 250 + 240 * Math.sin(angle) - 2.5;
+            }
+            dot.style.left = x + 'px';
+            dot.style.top = y + 'px';
+            bg.appendChild(dot);
+        }
+        var secondPointer = document.querySelector('#second-pointer');
+        var minutePointer = document.querySelector('#minute-pointer');
+        var hourPointer = document.querySelector('#hour-pointer');
+        var now = new Date();
+        var h = now.getHours();
+        var m = now.getMinutes();
+        var s = now.getSeconds();
+        var delay = h*3600+m*60+s;
+
+        secondPointer.style.animationDelay = -delay + "s";
+        minutePointer.style.animationDelay = -delay + "s";
+        hourPointer.style.animationDelay = -delay + "s";
+
+    }
+</script>
+</body>
+</html>

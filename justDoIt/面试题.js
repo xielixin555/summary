@@ -76,6 +76,7 @@ function bestCharge(order) {
 
 
 //3.命中线段
+//方法(1):(时间复杂度 O(n):使用了一次循环)
 // function segmentsHitTest(segments, target) {
 //   for (let i = 0; i < segments.length; i++) {
 //     if (segments[i][0] <= target && target <= segments[i][1]) {
@@ -84,12 +85,36 @@ function bestCharge(order) {
 //   }
 //   return -1
 // }
+
+//方法(2):使用二分法(时间复杂度 O(logn))
+// 在一维坐标轴上, 输入若干不重叠的线段和一个给定的坐标, 输出此坐标命中的线段索引.
+// 1. 每条线段由[起始坐标, 终止坐标]组成;
+// 2. 坐标大于等于0且小于等于1000000;
+// 3. 输出命中线段的索引, 如果没有命中, 则输出-1;
+// 4. 所有线段均不重叠, 且输入是有序的;
+function segmentsHitTest(segments, target) {
+  let len = segments.length,
+    from = 0;
+  while (len > 1) {
+    let mid = from + Math.floor(len / 2);
+    //如果当前中间位置的元素符合条件，直接return
+    if (segments[mid][0] <= target && segments[mid][1] >= target) return mid;
+    else if (segments[mid][1] < target) {
+      //如果target > 当前元素的最大值，要往右边找
+      len = Math.floor(len / 2) - 1;
+      from = mid + 1; //中间值往右找
+    } else {
+      //如果target < 当前元素的最小值，只把数组length缩短
+      len = Math.floor(len / 2);
+    }
+  }
+  return segments[from][0] <= target && segments[from][1] >= target ? from : -1;
+}
 // segmentsHitTest([
 //   [0, 5],
 //   [6, 10],
 //   [12, 15]
 // ], 7)
-
 //4.简单算术表达式????
 // 输入一行算术表达式, 请编写函数给出算术表达式的结果, 如果算术表达式不成立, 抛出异常.
 // 说明
@@ -165,7 +190,7 @@ function thrrow(fn, time) {
 // 1，创建一个新对象
 // 2，把新对象的原型指向为构造函数的原型对象
 // 3，改变构造函数的this指向为当前创建的对象
-// 4，根据返回值判断是否为一个对象是返回当前返回值，不是返回改变了this指向的创建出来的新对象
+// 4，根据返回值判断是否为一个对象，是则返回当前返回值，不是返回改变了this指向的创建出来的新对象
 function newOperator(el, ...args) {
   if (typeof el !== 'function') {
     throw new TypeError('Type Error')
@@ -177,32 +202,95 @@ function newOperator(el, ...args) {
   return isObject || isFunction ? res : obj
 }
 
-// 在一维坐标轴上, 输入若干不重叠的线段和一个给定的坐标, 输出此坐标命中的线段索引.
-// 1. 每条线段由[起始坐标, 终止坐标]组成;
-// 2. 坐标大于等于0且小于等于1000000;
-// 3. 输出命中线段的索引, 如果没有命中, 则输出-1;
-// 4. 所有线段均不重叠, 且输入是有序的;
-//***使用二分法（时间复杂度 O(logn) ）
-function segmentsHitTest(segments, target) {
-  let len = segments.length,
-    from = 0;
-  while (len > 1) {
-    let mid = from + Math.floor(len / 2);
-    //如果当前中间位置的元素符合条件，直接return
-    if (segments[mid][0] <= target && segments[mid][1] >= target) return mid;
-    else if (segments[mid][1] < target) {
-      //如果target > 当前元素的最大值，要往右边找
-      len = Math.floor(len / 2) - 1;
-      from = mid + 1; //中间值往右找
-    } else {
-      //如果target < 当前元素的最小值，只把数组length缩短
-      len = Math.floor(len / 2);
+//排序算法
+//1.冒泡排序
+function bubleSort(arr) {
+  let len = arr.length
+  for (let i = 0; index < len - 1; i++) {
+    for (let j = 0; j < len - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j]
+        arr[j] = arr[j + 1]
+        arr[j + 1] = temp
+      }
     }
   }
-  return segments[from][0] <= target && segments[from][1] >= target ? from : -1;
+  return arr;
 }
-// segmentsHitTest([
-//   [0, 5],
-//   [6, 10],
-//   [12, 15]
-// ], 7)
+
+//2.快速排序:找一个基准值
+function quickSort(arr) {
+  let mark = arr[0] //基准值
+  let leftArr = []
+  let rightArr = []
+  if (arr.length <= 1) return arr;
+  else {
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] <= mark) {
+        leftArr.push(arr[i])
+      } else {
+        rightArr.push(arr[i])
+      }
+    }
+  }
+  return quickSort(leftArr).concat([mark], quickSort(rightArr))
+}
+
+//3.归并排序：长度/2，分为左右两边
+function mergeSort(arr) {
+  let len = arr.length;
+  if (len <= 1) return arr;
+  else {
+    let index = Math.floor(len / 2);
+    let left = arr.slice(0, index);
+    let right = arr.slice(index);
+    return mergeSort(mergeSort(left), mergeSort(right));
+  }
+}
+
+function merge() {
+  let res = []
+  while (left.length && right.length) {
+    if (left[0] < right[0]) {
+      res.push(left.shift());
+    } else {
+      res.push(right.shift());
+    }
+  }
+  return arr.concat(left, right);
+}
+
+//递归深拷贝
+function deepClone(obj) {
+  let res = Array.isArray(obj) ? [] : {}
+  if (res && typeof res == 'object') {
+    for (let key in obj) {
+      if (obj[key] && typeof obj[key] === 'object') {
+        //如果当前项还是一个对象，递归克隆
+        res[key] = deepClone(obj[key]);
+      } else {
+        res[key] = obnj[key]
+      }
+    }
+  }
+  return res;
+}
+//路由钩子函数
+// 全局导航：beforeEach,beforeResolve,afterEach
+// 组件内：beforeRouteEnter,beforeRouteUpdate,beforeRouteLeave
+// 路由独享:beforeEnter
+
+//需要几个会议室
+function meeting(time) {
+  let count = 0
+  for (let i = 0; i < time.length; i++) {
+    for (let j = i + 1; j < time.length; j++) {
+      if (time[j][0] < time[i][1] && time[j][0] > time[i][0]) {
+        //上一次的开始时间 < 下一个会议的开始时间 < 上一次的结束时间，会议室+1
+        count++
+      }
+    }
+  }
+  return count
+}
+// meeting([[10,20],[19,30],[25,30]])

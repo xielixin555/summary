@@ -8,24 +8,41 @@
   <title>原生弹窗</title>
 </head>
 <style>
-  .dialog {
-    width: 200px;
-    height: 200px;
-    border: 1px solid red;
-    position: relative;
-    top: 50px;
-    left: 50px;
-    z-index: 30;
+  .mask {
+    width: 500px;
+    height: 500px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    margin: 0;
+    background: rgba(0, 0, 0, .3);
     display: none;
+
+  }
+
+  .dialog {
+    width: 250px;
+    height: 250px;
+    background: #fff;
+    position: absolute !important;
+    margin: 0 !important;
+    top: 50% !important;
+    left: 50% !important;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 </style>
 
 <body>
   <div>
     <button id="btn">点击出弹窗</button>
-    <div class="dialog" id="dialogshow">
-      <input type="text">
-      <button id="cancel">取消</button>
+    <div class="mask" id="dialogshow">
+      <div class="dialog">
+        <button id="cancel">取消</button>
+      </div>
     </div>
   </div>
 </body>
@@ -37,6 +54,9 @@
   let cancel = document.getElementById('cancel')
   button.onclick = function () {
     dialog.style.display = 'block'
+  }
+  dialog.onclick = function () {
+    dialog.style.display = 'none'
   }
   cancel.onclick = function () {
     dialog.style.display = 'none'
