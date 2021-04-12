@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<!-- 
+  -首先，我们当然不可能为每一个 li 标签手动添加一个 click 事件（容易累死）；
+  -其次，我们可能会想到使用 for 循环遍历每个元素，然后为其添加 click 事件，但这样会频繁操作 DOM，降低性能，卡到爆炸。
+   而事件委托意义就在于此：减少 DOM 操作，从而减少浏览器的重绘与重排次数，提升性能。
+  -事件委托的原理是，将 li 上监听的 click 事件委托到 ul 上。这里运用到了 事件冒泡 的机制，
+   即 onclick 事件以 li -> ul -> body -> html -> document 的冒泡顺序逐步传递。
+   所以，我们可以选择在其中的 ul 上监听 click 事件，从而实现事件委托。
+ -->
+
+<body>
+  <ul id="liList"></ul>
+</body>
+
+</html>
+<script>
+  // 假设一个 ul 下有一万个 li，li 的 innerHTML 是从 0 到 9999
+  // 当点击某个 li 时输出该 li 代表的值，如何实现
+  window.onload = function () {
+    var ul = document.getElementById("liList");
+    var arr = [];
+    for (let i = 0; i < 100; i++) {
+      arr.push(i);
+    }
+    ul.innerHTML = '<li>' + arr.join('</li><li>') + '</li>'
+
+    ul.onclick = function (event) {
+      alert(event.target.innerText);
+    }
+  }
+</script>

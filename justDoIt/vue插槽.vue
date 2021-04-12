@@ -39,8 +39,8 @@
     <!-- 父组件 -->
     <div>
       <child>
-        <template v-slot:header="first">{{ first.child1 }}</template>
-        <template v-slot:default="secound">{{ secound.child2 }}</template>
+        <template v-slot:default="first">{{ first.child1 }}</template>
+        <template v-slot:header="secound">{{ secound.child2 }}</template>
       </child>
     </div>
 

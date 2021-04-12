@@ -1,3 +1,5 @@
+//编程题目总结：https://leetcode-cn.com/circle/discuss/SVKmhR/
+
 //1 计算最优惠的价格
 // 定义包含菜品详细信息
 let obj = [{
@@ -129,7 +131,9 @@ function segmentsHitTest(segments, target) {
 function executeExpression(expression) {
   console.log(expression.split(''))
   let ff = expression.split('')
-  for (let i = 1; i < ff.length; i++) {}
+  for (let i = 1; i < ff.length; i++) {
+    //???
+  }
 }
 // executeExpression('32+64*2-10/5')
 
@@ -269,7 +273,7 @@ function deepClone(obj) {
         //如果当前项还是一个对象，递归克隆
         res[key] = deepClone(obj[key]);
       } else {
-        res[key] = obnj[key]
+        res[key] = obj[key]
       }
     }
   }
@@ -294,3 +298,223 @@ function meeting(time) {
   return count
 }
 // meeting([[10,20],[19,30],[25,30]])
+
+//把URL中的参数转成对象
+function getParam(url) {
+  let arr = url.split('?')[1].split('&')
+  let obj = {}
+  arr.forEach(el => {
+    let [key, value] = el.split('=')
+    if (!value) {
+      obj[key] = ''
+    } else {
+      obj[key] = value
+    }
+  })
+  console.log(obj)
+  // return obj
+}
+// getParam('http://sample.com/?a=1&e&b=2&c=xx&d')
+
+//将 HTTP header 转换成 js 对象
+function getHttp(str) {
+  let arr = str.split('\n')
+  let res = {}
+  arr.forEach(el => {
+    let [key, value] = el.split(':')
+    res[key] = value
+  });
+  console.log(res)
+}
+// getHttp(
+//   `Accept-Ranges: bytes 
+// Cache-Control: max-age=6000, public
+// Connection: keep-alive
+// Content-Type: application/javascript`)
+
+//将数组转化为树形结构
+function buildTree(arr) {
+  tmp = {};
+  res = {};
+  for (let i in arr) {
+    tmp[arr[i].id] = arr[i];
+  }
+  for (let i in tmp) {
+    if (tmp[i].parent_id) { // 如果节点没有父节点，即该节点为根节点
+      if (!tmp[tmp[i].parent_id].children) { // 该节点的父节点和该节点没有形成关系
+        tmp[tmp[i].parent_id].children = new Object();
+      }
+      tmp[tmp[i].parent_id].children[tmp[i].id] = tmp[i];
+    } else {
+      res[tmp[i].id] = tmp[i];
+    }
+  }
+  console.log(res)
+}
+var menu_list = [{
+  id: '1',
+  menu_name: '设置',
+  menu_url: 'setting',
+  parent_id: 0
+}, {
+  id: '1-1',
+  menu_name: '权限设置',
+  menu_url: 'setting.permission',
+  parent_id: '1'
+}, {
+  id: '1-1-1',
+  menu_name: '用户管理列表',
+  menu_url: 'setting.permission.user_list',
+  parent_id: '1-1'
+}, {
+  id: '1-1-2',
+  menu_name: '用户管理新增',
+  menu_url: 'setting.permission.user_add',
+  parent_id: '1-1'
+}, {
+  id: '1-1-3',
+  menu_name: '角色管理列表',
+  menu_url: 'setting.permission.role_list',
+  parent_id: '1-1'
+}, {
+  id: '1-2',
+  menu_name: '菜单设置',
+  menu_url: 'setting.menu',
+  parent_id: '1'
+}, {
+  id: '1-2-1',
+  menu_name: '菜单列表',
+  menu_url: 'setting.menu.menu_list',
+  parent_id: '1-2'
+}, {
+  id: '1-2-2',
+  menu_name: '菜单添加',
+  menu_url: 'setting.menu.menu_add',
+  parent_id: '1-2'
+}, {
+  id: '2',
+  menu_name: '订单',
+  menu_url: 'order',
+  parent_id: 0
+}, {
+  id: '2-1',
+  menu_name: '报单审核',
+  menu_url: 'order.orderreview',
+  parent_id: '2'
+}, {
+  id: '2-2',
+  menu_name: '退款管理',
+  menu_url: 'order.refundmanagement',
+  parent_id: '2'
+}]
+// buildTree(menu_list)
+
+//数组扁平化
+function flatten(arr) {
+  var result = [];
+  for (var i = 0, len = arr.length; i < len; i++) {
+    if (Array.isArray(arr[i])) {
+      result = result.concat(flatten(arr[i]))
+    } else {
+      result.push(arr[i])
+    }
+  }
+  return result;
+}
+// console.log(flatten([1, 2, 3, [4, 5, [6]]]))
+
+// 实现 Promise.all()
+function promiseAll(promises) {
+  return new Promise(function (resolve, reject) {
+    //all()方法是多个promise对象并行执行，所以参数必须是个数组
+    if (!isArray(promises)) {
+      return reject(new TypeError('arguments must be an array'));
+    }
+    var resolvedCounter = 0;
+    var promiseNum = promises.length;
+    var resolvedValues = new Array(promiseNum);
+    for (var i = 0; i < promiseNum; i++) {
+      (function (i) {
+        Promise.resolve(promises[i]).then(function (value) {
+          resolvedCounter++
+          //并且是按顺序返回结果
+          resolvedValues[i] = value
+          if (resolvedCounter == promiseNum) {
+            return resolve(resolvedValues)
+          }
+        }, function (reason) {
+          return reject(reason)
+        })
+      })(i)
+    }
+  })
+}
+
+//每隔一秒输出一个数字（三种方法）
+// -1.使用let(没有变量提升，生成块级作用域)
+// for (let i = 0; i < 10; i++) {
+//   setTimeout(() => {
+//     console.log(i);
+//   }, 1000 * i)
+// }
+
+// -2.使用闭包
+// 通过闭包，将i的变量驻留在内存中，当输出j时，引用的是外部函数A的变量值i，
+// i的值是根据循环来的，执行setTimeout时已经确定了里面的的输出了。
+// for (var i = 0; i < 10; i++) {
+//   (function (j) {
+//     setTimeout(() => {
+//       console.log(j);
+//     }, 1000 * j)
+//   })(i) 
+// }
+
+// -3.第三个参数
+//setTimeout第三个参数是给函数表达式传参
+// for (var i = 0; i <= 5; i++) {
+//   setTimeout((j) => {
+//     console.log(j);
+//   }, i * 1000, i)
+// }
+eg:
+  // function fn2(){
+  //      for(var i=0;i<4;i++){
+  //        var timer=setInterval(function(i,timer){
+  //          console.log(i);
+  //          clearInterval(timer)
+  //        },10,i,timer);
+  //      }
+  //    }
+  //    fn2();
+  //输出： 0 1 2 3 3 3 （3 重复） 因为第三个参数是给函数传参，i加到3就不变了
+
+  //实现一个函数，random，入参是一个数组 arr，每次执行random，输出一个随机arr数组
+  function random(arr) {
+    let len = arr.length
+    let newArray = []
+    let selectItem = null
+    while (newArray.length < len) {
+      //随机生成一个0~9之间的数字并从arr中取值
+      selectItem = arr[Math.floor(Math.random() * 10)]
+      //判断新数组中是否存在此次取出的值，若存在说明不可用进入下次循环，若不存在则存入新数组
+      if (typeof selectItem !== 'undefined' && newArray.indexOf(selectItem) < 0) {
+        newArray.push(selectItem)
+      }
+    }
+    console.log(newArray)
+  }
+random([1, 2, 3, 4])
+
+//原生Ajax
+//1.创建xhr对象
+var xhr = new XMLHttpRequest()
+//2.配置请求地址
+xhr.open('get', 'index.html', true)
+//3.发送请求
+xhr.send(null)
+//4.监听请求，接收响应
+xhr.onreadystatechange = function () {
+  if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
+    console.log(xhr.responseXML);
+  }
+}
